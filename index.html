@@ -1,0 +1,51 @@
+def get_bmi(weight, height):
+    # Height in meters, weight in kg
+    return weight / (height ** 2)
+
+def evaluate_bmi(bmi, age):
+    if age < 18:
+        # Rough BMI interpretation for children and teens
+        if bmi < 14:
+            return "Underweight"
+        elif 14 <= bmi < 20:
+            return "Normal weight"
+        elif 20 <= bmi < 25:
+            return "Overweight"
+        else:
+            return "Obese"
+    else:
+        # Adult BMI interpretation
+        if bmi < 18.5:
+            return "Underweight"
+        elif 18.5 <= bmi < 24.9:
+            return "Normal weight"
+        elif 25 <= bmi < 29.9:
+            return "Overweight"
+        else:
+            return "Obese"
+
+def main():
+    print("=== Health Checker ===")
+    try:
+        gender = input("Enter your gender (Male/Female): ").strip().capitalize()
+        age = int(input("Enter your age (in years): "))
+        height_cm = float(input("Enter your height (in cm): "))
+        weight_kg = float(input("Enter your weight (in kg): "))
+
+        height_m = height_cm / 100  # Convert cm to meters
+        bmi = get_bmi(weight_kg, height_m)
+        category = evaluate_bmi(bmi, age)
+
+        print(f"\n--- Results ---")
+        print(f"Gender: {gender}")
+        print(f"Age: {age}")
+        print(f"Height: {height_cm} cm")
+        print(f"Weight: {weight_kg} kg")
+        print(f"BMI: {bmi:.2f}")
+        print(f"Health Category: {category}")
+
+    except ValueError:
+        print("Invalid input. Please enter numeric values for age, height, and weight.")
+
+if __name__ == "__main__":
+    main()
