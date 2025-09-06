@@ -1,51 +1,111 @@
-def get_bmi(weight, height):
-    # Height in meters, weight in kg
-    return weight / (height ** 2)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Height and Weight Estimator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f0f8ff;
+    }
+    .container {
+      max-width: 400px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label, select, input {
+      display: block;
+      margin-bottom: 15px;
+      width: 100%;
+    }
+    button {
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
 
-def evaluate_bmi(bmi, age):
-    if age < 18:
-        # Rough BMI interpretation for children and teens
-        if bmi < 14:
-            return "Underweight"
-        elif 14 <= bmi < 20:
-            return "Normal weight"
-        elif 20 <= bmi < 25:
-            return "Overweight"
-        else:
-            return "Obese"
-    else:
-        # Adult BMI interpretation
-        if bmi < 18.5:
-            return "Underweight"
-        elif 18.5 <= bmi < 24.9:
-            return "Normal weight"
-        elif 25 <= bmi < 29.9:
-            return "Overweight"
-        else:
-            return "Obese"
+<div class="container">
+  <h2>Height and Weight Estimator</h2>
 
-def main():
-    print("=== Health Checker ===")
-    try:
-        gender = input("Enter your gender (Male/Female): ").strip().capitalize()
-        age = int(input("Enter your age (in years): "))
-        height_cm = float(input("Enter your height (in cm): "))
-        weight_kg = float(input("Enter your weight (in kg): "))
+  <label for="age">Age (years):</label>
+  <input type="number" id="age" min="1" max="100" required>
 
-        height_m = height_cm / 100  # Convert cm to meters
-        bmi = get_bmi(weight_kg, height_m)
-        category = evaluate_bmi(bmi, age)
+  <label for="gender">Gender:</label>
+  <select id="gender" required>
+    <option value="">Select Gender</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+    <option value="other">Other</option>
+  </select>
 
-        print(f"\n--- Results ---")
-        print(f"Gender: {gender}")
-        print(f"Age: {age}")
-        print(f"Height: {height_cm} cm")
-        print(f"Weight: {weight_kg} kg")
-        print(f"BMI: {bmi:.2f}")
-        print(f"Health Category: {category}")
+  <button onclick="calculate()">Calculate</button>
 
-    except ValueError:
-        print("Invalid input. Please enter numeric values for age, height, and weight.")
+  <div class="result" id="result"></div>
+</div>
 
-if __name__ == "__main__":
-    main()
+<script>
+function calculate() {
+  const age = parseInt(document.getElementById('age').value);
+  const gender = document.getElementById('gender').value;
+  const result = document.getElementById('result');
+
+  if (!age || !gender) {
+    result.textContent = "Please enter all the fields.";
+    return;
+  }
+
+  let height, weight;
+
+  // Rough estimations based on generic growth patterns (not medically accurate)
+  if (age <= 12) {
+    height = 90 + age * 6; // cm
+    weight = 10 + age * 2; // kg
+  } else if (age <= 20) {
+    if (gender === "male") {
+      height = 150 + (age - 12) * 2; 
+      weight = 40 + (age - 12) * 3;
+    } else if (gender === "female") {
+      height = 145 + (age - 12) * 1.8; 
+      weight = 38 + (age - 12) * 2.5;
+    } else {
+      height = 148 + (age - 12) * 1.9;
+      weight = 39 + (age - 12) * 2.7;
+    }
+  } else {
+    // Adults (rough averages)
+    if (gender === "male") {
+      height = 175;
+      weight = 70;
+    } else if (gender === "female") {
+      height = 162;
+      weight = 60;
+    } else {
+      height = 168;
+      weight = 65;
+    }
+  }
+
+  result.innerHTML = `
+    <p>Estimated Height: <strong>${height.toFixed(1)} cm</strong></p>
+    <p>Estimated Weight: <strong>${weight.toFixed(1)} kg</strong></p>
+  `;
+}
+</script>
+
+</body>
+</html>
